@@ -1,8 +1,17 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { authors } from "../constants";
+
+function useDebounce(effect: any, dependencies: any, delay: number) {
+  const callback = useCallback(effect, dependencies);
+
+  useEffect(() => {
+    const timeout = setTimeout(callback, delay);
+    return () => clearTimeout(timeout);
+  }, [callback, delay]);
+}
 
 export default function Search() {
   const router = useRouter();
@@ -10,6 +19,16 @@ export default function Search() {
   const searchParams = useSearchParams();
   const query = searchParams.get("query") || "";
   const author = searchParams.get("author") || "";
+
+  const [searchVal, setSearchVal] = useState(query);
+
+  useDebounce(
+    () => {
+      router.push(pathname + "?" + createQueryString("query", searchVal));
+    },
+    [searchVal],
+    300,
+  );
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -27,11 +46,9 @@ export default function Search() {
   return (
     <div className="w-full mb-4 flex gap-4">
       <input
-        value={query}
+        value={searchVal}
         onChange={(e) => {
-          router.push(
-            pathname + "?" + createQueryString("query", e.target.value),
-          );
+          setSearchVal(e.target.value);
         }}
         className="p-3 rounded-xl w-full flex-[2]"
         placeholder="Search content..."
