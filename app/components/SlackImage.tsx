@@ -20,5 +20,5 @@ export default async function SlackImage({ meme }: { meme: Meme }) {
 
   const src = "data:image/png" + ";base64," + blob;
 
-  return <img src={src} alt="" className="dark:invert border-0" width="100%" />;
+  return <img src={src} alt="" width="100%" />;
 }
