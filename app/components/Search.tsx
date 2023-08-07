@@ -3,6 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { authors } from "../constants";
+import '../globals.css';
 
 function useDebounce(effect: any, dependencies: any, delay: number) {
   const callback = useCallback(effect, dependencies);
@@ -51,11 +52,13 @@ export default function Search() {
           setSearchVal(e.target.value);
         }}
         className="p-3 rounded-xl w-full flex-[2]"
+        id="inputBox"
         placeholder="Search content..."
       />
 
       <select
         className="p-3 rounded-xl flex-[1]"
+        id="inputBox"
         onChange={(e) => {
           router.push(
             pathname + "?" + createQueryString("author", e.target.value),
@@ -64,7 +67,7 @@ export default function Search() {
       >
         <option value="">All</option>
         {authors.map((item) => (
-          <option value={item} key={item}>
+          <option id="inputBox" value={item} key={item}>
             {item}
           </option>
         ))}
